@@ -254,26 +254,26 @@ if page == "Application":
 
                     holidays = st.checkbox('Add country holidays to the model')
 
-            with st.expander('Hyperparameters'):
-                st.write(
-                    'In this section it is possible to tune the scaling coefficients.')
+            # with st.expander('Hyperparameters'):
+            #     st.write(
+            #         'In this section it is possible to tune the scaling coefficients.')
 
-                seasonality_scale_values = [0.1, 1.0, 5.0]
-                changepoint_scale_values = [ 0.1, 0.5, 1.0]
+            #     seasonality_scale_values = [0.1, 1.0, 5.0]
+            #     changepoint_scale_values = [ 0.1, 0.5, 1.0]
 
-                st.write("The changepoint prior scale determines the flexibility of the trend, and in particular how much the trend changes at the trend changepoints.")
-                changepoint_scale = st.select_slider(
-                    label='Changepoint prior scale', options=changepoint_scale_values)
+            #     st.write("The changepoint prior scale determines the flexibility of the trend, and in particular how much the trend changes at the trend changepoints.")
+            #     changepoint_scale = st.select_slider(
+            #         label='Changepoint prior scale', options=changepoint_scale_values)
 
-                st.write(
-                    "The seasonality change point controls the flexibility of the seasonality.")
-                seasonality_scale = st.select_slider(
-                    label='Seasonality prior scale', options=seasonality_scale_values)
+            #     st.write(
+            #         "The seasonality change point controls the flexibility of the seasonality.")
+            #     seasonality_scale = st.select_slider(
+            #         label='Seasonality prior scale', options=seasonality_scale_values)
 
-                st.markdown(
-                    """For more information read the [documentation](https://facebook.github.io/prophet/docs/diagnostics.html#parallelizing-cross-validation)""")
-                # falta el seasonality holydays scale
-                # y que el slider seas continuos no discretos
+            #     st.markdown(
+            #         """For more information read the [documentation](https://facebook.github.io/prophet/docs/diagnostics.html#parallelizing-cross-validation)""")
+            #     # falta el seasonality holydays scale
+            #     # y que el slider seas continuos no discretos
         submitted = st.form_submit_button("Submit")
 
         if submitted:
