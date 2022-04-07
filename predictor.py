@@ -394,8 +394,8 @@ if page == "Application":
                             weekly_seasonality=weekly,
                             yearly_seasonality=yearly,
                             growth=growth,
-                            changepoint_prior_scale=changepoint_scale,
-                            seasonality_prior_scale=seasonality_scale,
+                            # changepoint_prior_scale=changepoint_scale,
+                            # seasonality_prior_scale=seasonality_scale,
                            # holidays=covid_dates
                             )
                 if holidays:
