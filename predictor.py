@@ -2,6 +2,7 @@ import streamlit as st
 
 import pandas as pd
 import numpy as np
+import yfinance as yf
 
 from fbprophet import Prophet
 from fbprophet.plot import add_changepoints_to_plot
@@ -47,40 +48,42 @@ def prep_data(df):
 
 if page == "Application":
 
-    st.title('Forecast application 🧙🏻')
+    st.title('Top 3 Stocks')
 
     st.write(
-        'This app enables you to generate time series forecast withouth any dependencies.')
+        'Compare Top 3 popular stocks')
     st.markdown(
         """The forecasting library used is **[Prophet](https://facebook.github.io/prophet/)**.""")
     # caching.clear_cache()
     df = pd.DataFrame()
 
     st.subheader('1. Data loading 🏋️')
-    st.write("Import a time series csv file.")
-    with st.expander("Data format"):
-        st.write("The dataset can contain multiple columns but you will need to select a column to be used as dates and a second column containing the metric you wish to forecast. The columns will be renamed as **ds** and **y** to be compliant with Prophet. Even though we are using the default Pandas date parser, the ds (datestamp) column should be of a format expected by Pandas, ideally YYYY-MM-DD for a date or YYYY-MM-DD HH:MM:SS for a timestamp. The y column must be numeric.")
 
-    input = st.file_uploader('')
+    # if input:
+    #     with st.spinner('Loading data..'):
+    #         df = load_csv(input)
 
-    if input:
-        with st.spinner('Loading data..'):
-            df = load_csv(input)
+    #         st.write("Columns:")
+    #         st.write(list(df.columns))
+    #         columns = list(df.columns)
 
-            st.write("Columns:")
-            st.write(list(df.columns))
-            columns = list(df.columns)
+    #         col1, col2 = st.columns(2)
+    #         with col1:
+    #             date_col = st.selectbox(
+    #                 "Select date column", index=0, options=columns, key="date")
+    #         with col2:
+    #             metric_col = st.selectbox(
+    #                 "Select values column", index=1, options=columns, key="values")
+    
+    
 
-            col1, col2 = st.columns(2)
-            with col1:
-                date_col = st.selectbox(
-                    "Select date column", index=0, options=columns, key="date")
-            with col2:
-                metric_col = st.selectbox(
-                    "Select values column", index=1, options=columns, key="values")
+# #######
+    brk = yf.Ticker('TSLA')
 
-            df = prep_data(df)
-            output = 0
+    hist = brk.history(period="max", auto_adjust=True)
+    
+    df = prep_data(hist)
+    output = 0
 
     if st.checkbox('Chart data', key='show'):
         with st.spinner('Plotting data..'):
