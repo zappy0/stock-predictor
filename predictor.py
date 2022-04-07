@@ -308,11 +308,10 @@ if page == "Application":
             Trend components: {daily};{weekly};{monthly};{yearly} \n
             Growth: {growth} 
             Holidays: {selected_country} \n
-            Hyperparameters: changepoints{changepoint_scale}, seasonality {seasonality_scale}
             """)
             st.success("Configuration submitted")
             st.write(df.head())
-
+    # Hyperparameters: changepoints{changepoint_scale}, seasonality {seasonality_scale}
     # growth with radio button
     # with st.expander("Growth model"):
     #         st.write('Prophet uses by default a linear growth model.')
