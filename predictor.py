@@ -407,8 +407,7 @@ if page == "Application":
 
                     m = m.fit(df)
 
-                    future = m.make_future_dataframe(
-                        periods=periods_input, freq='D')
+                    future = m.make_future_dataframe(periods=periods_input, freq='D')
 
                     future['cap'] = cap
                     future['floor'] = floor
