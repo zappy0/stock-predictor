@@ -77,6 +77,11 @@ if page == "Application":
     
 
 # #######
+
+    tickers = st.multiselect('Select Tickers',['TSLA','AAPL','IBM'],['TSLA'])
+    
+    for ticker in tickers:
+        
     brk = yf.Ticker('TSLA')
 
     hist = brk.history(period="max", auto_adjust=True)
@@ -115,59 +120,58 @@ if page == "Application":
             st.write('In this section you can modify the algorithm settings.')
 
             with st.expander("Horizon"):
-                periods_input = st.number_input('Select how many future periods (days) to forecast.',
-                                                min_value=1, max_value=366, value=90)
+                periods_input = 365
 
-            with st.expander("Seasonality"):
-                st.markdown(
-                    """The default seasonality used is additive, but the best choice depends on the specific case, therefore specific domain knowledge is required. For more informations visit the [documentation](https://facebook.github.io/prophet/docs/multiplicative_seasonality.html)""")
-                seasonality = st.radio(label='Seasonality', options=[
-                                       'additive', 'multiplicative'])
+            # with st.expander("Seasonality"):
+            #     st.markdown(
+            #         """The default seasonality used is additive, but the best choice depends on the specific case, therefore specific domain knowledge is required. For more informations visit the [documentation](https://facebook.github.io/prophet/docs/multiplicative_seasonality.html)""")
+            #     seasonality = st.radio(label='Seasonality', options=[
+            #                            'additive', 'multiplicative'])
 
-            with st.expander("Trend components"):
-                st.write("Add or remove components:")
-                daily = st.checkbox("Daily")
-                weekly = st.checkbox("Weekly")
-                monthly = st.checkbox("Monthly")
-                yearly = st.checkbox("Yearly")
+            # with st.expander("Trend components"):
+            #     st.write("Add or remove components:")
+            #     daily = st.checkbox("Daily")
+            #     weekly = st.checkbox("Weekly")
+            #     monthly = st.checkbox("Monthly")
+            #     yearly = st.checkbox("Yearly")
 
-            with st.expander("Growth model"):
+            # with st.expander("Growth model"):
                 
-                st.write('Prophet uses by default a linear growth model.')
-                st.markdown(
-                    """For more information check the [documentation](https://facebook.github.io/prophet/docs/saturating_forecasts.html#forecasting-growth)""")
-                st.write('Configure saturation (for logistic growth only )')
+            #     st.write('Prophet uses by default a linear growth model.')
+            #     st.markdown(
+            #         """For more information check the [documentation](https://facebook.github.io/prophet/docs/saturating_forecasts.html#forecasting-growth)""")
+            #     st.write('Configure saturation (for logistic growth only )')
                 
-                growth = st.radio(label='Growth model',options=['linear',"logistic"]) 
+            #     growth = st.radio(label='Growth model',options=['linear',"logistic"]) 
 
-            if growth == 'linear':
-                growth_settings= {
-                            'cap':1,
-                            'floor':0
-                        }
-                cap=1
-                floor=1
-                df['cap']=1
-                df['floor']=0
+            # if growth == 'linear':
+            #     growth_settings= {
+            #                 'cap':1,
+            #                 'floor':0
+            #             }
+            #     cap=1
+            #     floor=1
+            #     df['cap']=1
+            #     df['floor']=0
 
-            if growth == 'logistic':
-                st.info('Configure saturation')
+            # if growth == 'logistic':
+            #     st.info('Configure saturation')
 
-                cap = st.slider('Cap',min_value=0.0,max_value=1.0,step=0.05)
-                floor = st.slider('Floor',min_value=0.0,max_value=1.0,step=0.05)
-                if floor > cap:
-                    st.error('Invalid settings. Cap must be higher then floor.')
-                    growth_settings={}
+            #     cap = st.slider('Cap',min_value=0.0,max_value=1.0,step=0.05)
+            #     floor = st.slider('Floor',min_value=0.0,max_value=1.0,step=0.05)
+            #     if floor > cap:
+            #         st.error('Invalid settings. Cap must be higher then floor.')
+            #         growth_settings={}
 
-                if floor == cap:
-                    st.warning('Cap must be higher than floor')
-                else:
-                    growth_settings = {
-                        'cap':cap,
-                        'floor':floor
-                        }
-                    df['cap']=cap
-                    df['floor']=floor
+            #     if floor == cap:
+            #         st.warning('Cap must be higher than floor')
+            #     else:
+            #         growth_settings = {
+            #             'cap':cap,
+            #             'floor':floor
+            #             }
+            #         df['cap']=cap
+            #         df['floor']=floor
                 
                 # growth = st.radio(label='Growth model', options=[
                 #                   'linear', "logistic"])
@@ -210,49 +214,49 @@ if page == "Application":
                 # df['cap']=cap
                 # df['floor']=floor
 
-            with st.expander('Holidays'):
+            # with st.expander('Holidays'):
 
-                countries = ['Country name', 'Italy', 'Spain',
-                             'United States', 'France', 'Germany', 'Ukraine']
+            #     countries = ['Country name', 'Italy', 'Spain',
+            #                  'United States', 'France', 'Germany', 'Ukraine']
 
-                with st.container():
-                    years = [2022]
-                    selected_country = st.selectbox(
-                        label="Select country", options=countries)
+            #     with st.container():
+            #         years = [2022]
+            #         selected_country = st.selectbox(
+            #             label="Select country", options=countries)
 
-                    if selected_country == 'Italy':
-                        for date, name in sorted(holidays.IT(years=years).items()):
-                            st.write(date, name)
+            #         if selected_country == 'Italy':
+            #             for date, name in sorted(holidays.IT(years=years).items()):
+            #                 st.write(date, name)
 
-                    if selected_country == 'Spain':
+            #         if selected_country == 'Spain':
 
-                        for date, name in sorted(holidays.ES(years=years).items()):
-                            st.write(date, name)
+            #             for date, name in sorted(holidays.ES(years=years).items()):
+            #                 st.write(date, name)
 
-                    if selected_country == 'United States':
+            #         if selected_country == 'United States':
 
-                        for date, name in sorted(holidays.US(years=years).items()):
-                            st.write(date, name)
+            #             for date, name in sorted(holidays.US(years=years).items()):
+            #                 st.write(date, name)
 
-                    if selected_country == 'France':
+            #         if selected_country == 'France':
 
-                        for date, name in sorted(holidays.FR(years=years).items()):
-                            st.write(date, name)
+            #             for date, name in sorted(holidays.FR(years=years).items()):
+            #                 st.write(date, name)
 
-                    if selected_country == 'Germany':
+            #         if selected_country == 'Germany':
 
-                        for date, name in sorted(holidays.DE(years=years).items()):
-                            st.write(date, name)
+            #             for date, name in sorted(holidays.DE(years=years).items()):
+            #                 st.write(date, name)
 
-                    if selected_country == 'Ukraine':
+            #         if selected_country == 'Ukraine':
 
-                        for date, name in sorted(holidays.UKR(years=years).items()):
-                            st.write(date, name)
+            #             for date, name in sorted(holidays.UKR(years=years).items()):
+            #                 st.write(date, name)
 
-                    else:
-                        holidays = False
+            #         else:
+            #             holidays = False
 
-                    holidays = st.checkbox('Add country holidays to the model')
+            #         holidays = st.checkbox('Add country holidays to the model')
 
             # with st.expander('Hyperparameters'):
             #     st.write(
@@ -304,13 +308,14 @@ if page == "Application":
 
             st.markdown(f""" Model Configuration: \n
             Horizon: {periods_input}  days    \n
-            Seasonality: {seasonality}  \n
-            Trend components: {daily};{weekly};{monthly};{yearly} \n
-            Growth: {growth} 
-            Holidays: {selected_country} \n
+            
             """)
             st.success("Configuration submitted")
             st.write(df.head())
+    # Seasonality: {seasonality}  \n
+    #         Trend components: {daily};{weekly};{monthly};{yearly} \n
+    #         Growth: {growth} 
+    #         Holidays: {selected_country} \n
     # Hyperparameters: changepoints{changepoint_scale}, seasonality {seasonality_scale}
     # growth with radio button
     # with st.expander("Growth model"):
@@ -355,30 +360,30 @@ if page == "Application":
             #     df['cap']=cap
             #     df['floor']=floor
 
-    st.write("Below you can upload further regressors to the forecast")
-    with st.expander("Regressors"):
+    # st.write("Below you can upload further regressors to the forecast")
+    # with st.expander("Regressors"):
 
-        regressor_input = st.file_uploader(
-            'Upload time series of values that have an impact on the time series you are predicting.')
+    #     regressor_input = st.file_uploader(
+    #         'Upload time series of values that have an impact on the time series you are predicting.')
 
-        if regressor_input:
+    #     if regressor_input:
 
-            metric_df = load_csv(regressor_input)
+    #         metric_df = load_csv(regressor_input)
 
-            st.write("Columns:")
-            st.write(list(metric_df.columns))
-            columns_2 = list(metric_df.columns)
+    #         st.write("Columns:")
+    #         st.write(list(metric_df.columns))
+    #         columns_2 = list(metric_df.columns)
 
-            col1, col2 = st.columns(2)
-            with col1:
-                date_col = st.selectbox(
-                    "Select date column", index=0, options=columns_2, key="date_2")
-            with col2:
-                metric_col = st.selectbox(
-                    "Select values column", index=1, options=columns_2, key="values_2")
+    #         col1, col2 = st.columns(2)
+    #         with col1:
+    #             date_col = st.selectbox(
+    #                 "Select date column", index=0, options=columns_2, key="date_2")
+    #         with col2:
+    #             metric_col = st.selectbox(
+    #                 "Select values column", index=1, options=columns_2, key="values_2")
 
-            metric_df = prep_data(metric_df)
-            output = 0
+    #         metric_df = prep_data(metric_df)
+    #         output = 0
 
     with st.container():
         st.subheader("3. Forecast 🔮")
@@ -398,15 +403,15 @@ if page == "Application":
                             # seasonality_prior_scale=seasonality_scale,
                            # holidays=covid_dates
                             )
-                if holidays:
-                    m.add_country_holidays(country_name=selected_country)
+                # if holidays:
+                #     m.add_country_holidays(country_name=selected_country)
 
-                if monthly:
-                    m.add_seasonality(
-                        name='monthly', period=30.4375, fourier_order=5)
-                if regressor_input:
-                    m.add_regressor(metric_name)
-                    df = pd.merge(df, metric_df, how="left", on="ds")
+                # if monthly:
+                #     m.add_seasonality(
+                #         name='monthly', period=30.4375, fourier_order=5)
+                # if regressor_input:
+                #     m.add_regressor(metric_name)
+                #     df = pd.merge(df, metric_df, how="left", on="ds")
                 with st.spinner('Fitting the model..'):
 
                     m = m.fit(df)
@@ -420,9 +425,9 @@ if page == "Application":
                         "The model will produce forecast up to ", future['ds'].max())
                     st.success('Model fitted successfully')
 
-                if regressor_input:
-                    future = pd.merge(future, metric_df,
-                                        how="left", on="ds")
+                # if regressor_input:
+                #     future = pd.merge(future, metric_df,
+                #                         how="left", on="ds")
 
                 # else:
                 #     st.warning('Invalid configuration')
@@ -473,6 +478,8 @@ if page == "Application":
                         st.write(fig1)
                         output = 1
 
+                        ######
+                        growth = linear
                         if growth == 'linear':
                             fig2 = m.plot(forecast)
                             a = add_changepoints_to_plot(
