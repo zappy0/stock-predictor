@@ -82,7 +82,10 @@ if page == "Application":
 
     hist = brk.history(period="max", auto_adjust=True)
     
-    df = prep_data(hist)
+    df['ds'] = hist.index
+    df['y'] = hist['Close'].values
+    
+    df = prep_data(df)
     output = 0
 
     if st.checkbox('Chart data', key='show'):
