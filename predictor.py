@@ -20,7 +20,8 @@ import itertools
 st.set_page_config(page_title="Stock Predictor",
                    initial_sidebar_state="collapsed")
 
-
+tabs = ["Application"]
+page = st.sidebar.radio("Tabs", tabs)
 
 @st.cache(persist=False, suppress_st_warning=True, show_spinner=True, allow_output_mutation=True)
 def load_csv(input_metric):
