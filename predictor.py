@@ -8,7 +8,7 @@ from fbprophet import Prophet
 from fbprophet.plot import add_changepoints_to_plot
 from fbprophet.diagnostics import cross_validation
 from fbprophet.diagnostics import performance_metrics
-from fbprophet.plot import plot_cross_validation_metric
+from fbprophet.plot import plot_cross``_validation_metric
 import json
 from fbprophet.serialize import model_to_json, model_from_json
 import holidays
@@ -23,6 +23,7 @@ st.set_page_config(page_title="Stock Predictor",
 
 tabs = ["Application"]
 page = st.sidebar.radio("Tabs", tabs)
+
 
 @st.cache(persist=False, suppress_st_warning=True, show_spinner=True, allow_output_mutation=True)
 def load_csv(input_metric):
@@ -73,17 +74,16 @@ if page == "Application":
     #         with col2:
     #             metric_col = st.selectbox(
     #                 "Select values column", index=1, options=columns, key="values")
-    
-    
+
 
 # #######
     brk = yf.Ticker('TSLA')
 
     hist = brk.history(period="max", auto_adjust=True)
-    
+
     df['ds'] = hist.index
     df['y'] = hist['Close'].values
-    
+
     df = prep_data(df)
     output = 0
 
@@ -132,43 +132,45 @@ if page == "Application":
                 yearly = st.checkbox("Yearly")
 
             with st.expander("Growth model"):
-                
+
                 st.write('Prophet uses by default a linear growth model.')
                 st.markdown(
                     """For more information check the [documentation](https://facebook.github.io/prophet/docs/saturating_forecasts.html#forecasting-growth)""")
                 st.write('Configure saturation (for logistic growth only )')
-                
-                growth = st.radio(label='Growth model',options=['linear',"logistic"]) 
+
+                growth = st.radio(label='Growth model', options=[
+                                  'linear', "logistic"])
 
             if growth == 'linear':
-                growth_settings= {
-                            'cap':1,
-                            'floor':0
-                        }
-                cap=1
-                floor=1
-                df['cap']=1
-                df['floor']=0
+                growth_settings = {
+                    'cap': 1,
+                    'floor': 0
+                }
+                cap = 1
+                floor = 1
+                df['cap'] = 1
+                df['floor'] = 0
 
             if growth == 'logistic':
                 st.info('Configure saturation')
 
-                cap = st.slider('Cap',min_value=0.0,max_value=1.0,step=0.05)
-                floor = st.slider('Floor',min_value=0.0,max_value=1.0,step=0.05)
+                cap = st.slider('Cap', min_value=0.0, max_value=1.0, step=0.05)
+                floor = st.slider('Floor', min_value=0.0,
+                                  max_value=1.0, step=0.05)
                 if floor > cap:
                     st.error('Invalid settings. Cap must be higher then floor.')
-                    growth_settings={}
+                    growth_settings = {}
 
                 if floor == cap:
                     st.warning('Cap must be higher than floor')
                 else:
                     growth_settings = {
-                        'cap':cap,
-                        'floor':floor
-                        }
-                    df['cap']=cap
-                    df['floor']=floor
-                
+                        'cap': cap,
+                        'floor': floor
+                    }
+                    df['cap'] = cap
+                    df['floor'] = floor
+
                 # growth = st.radio(label='Growth model', options=[
                 #                   'linear', "logistic"])
                 # saturation = st.slider(label="+/- Growth factor (%)",
@@ -277,7 +279,7 @@ if page == "Application":
         submitted = st.form_submit_button("Submit")
 
         if submitted:
-            
+
             # if growth == 'linear':
             #     # growth_settings= {
             #     #             'cap':1,
@@ -396,7 +398,7 @@ if page == "Application":
                             growth=growth,
                             # changepoint_prior_scale=changepoint_scale,
                             # seasonality_prior_scale=seasonality_scale,
-                           # holidays=covid_dates
+                            # holidays=covid_dates
                             )
                 if holidays:
                     m.add_country_holidays(country_name=selected_country)
@@ -411,7 +413,8 @@ if page == "Application":
 
                     m = m.fit(df)
 
-                    future = m.make_future_dataframe(periods=periods_input, freq='D')
+                    future = m.make_future_dataframe(
+                        periods=periods_input, freq='D')
 
                     future['cap'] = cap
                     future['floor'] = floor
@@ -422,7 +425,7 @@ if page == "Application":
 
                 if regressor_input:
                     future = pd.merge(future, metric_df,
-                                        how="left", on="ds")
+                                      how="left", on="ds")
 
                 # else:
                 #     st.warning('Invalid configuration')
@@ -490,42 +493,34 @@ if page == "Application":
                             st.write(fig3)
                     except:
                         st.warning("Requires forecast generation")
-                    
-            
+
             if input:
                 if output == 1:
-                    
+
                     # with st.expander('Download forecast'):
                     @st.cache
                     def convert_df(df):
-                         
-                        
+
                         # IMPORTANT: Cache the conversion to prevent computation on every rerun
                         return df.to_csv().encode('utf-8')
 
-                    csv = convert_df( pd.DataFrame(
-                                forecast[['ds', 'yhat_lower', 'yhat', 'yhat_upper']]))
-                    
-                   
+                    csv = convert_df(pd.DataFrame(
+                        forecast[['ds', 'yhat_lower', 'yhat', 'yhat_upper']]))
+
                     st.download_button(label="Download data as CSV",
-                                        data=csv,
-                                        file_name='forecast.csv',
-                                        mime='text/csv')
-                        
-                        
-                        
-                        # if st.button('Export forecast (.csv)'):
-                        #     with st.spinner("Exporting.."):
+                                       data=csv,
+                                       file_name='forecast.csv',
+                                       mime='text/csv')
 
-                        #         export_forecast = pd.DataFrame(
-                        #             forecast[['ds', 'yhat_lower', 'yhat', 'yhat_upper']]).to_csv()
-                        #         b64 = base64.b64encode(
-                        #             export_forecast.encode()).decode()
-                        #         href = f'<a href="data:file/csv;base64,{b64}">Download CSV File</a> (right click  > save as  **forecast.csv**)'
-                        #         st.markdown(href, unsafe_allow_html=True)
+                    # if st.button('Export forecast (.csv)'):
+                    #     with st.spinner("Exporting.."):
 
-                    
-
+                    #         export_forecast = pd.DataFrame(
+                    #             forecast[['ds', 'yhat_lower', 'yhat', 'yhat_upper']]).to_csv()
+                    #         b64 = base64.b64encode(
+                    #             export_forecast.encode()).decode()
+                    #         href = f'<a href="data:file/csv;base64,{b64}">Download CSV File</a> (right click  > save as  **forecast.csv**)'
+                    #         st.markdown(href, unsafe_allow_html=True)
 
         st.subheader('4. Model validation 🧪')
         st.write(
@@ -539,8 +534,7 @@ if page == "Application":
                 "Cutoff (period): a forecast is made for every observed point between cutoff and cutoff + horizon.""")
 
         # with st.expander("Cross validation"):
-            
-                                     
+
             # initial = st.number_input(
             #     value=365, label="initial", min_value=30, max_value=1096)
             # initial = str(initial) + " days"
@@ -553,18 +547,22 @@ if page == "Application":
             #     value=90, label="horizon", min_value=30, max_value=366)
             # horizon = str(horizon) + " days"
 
-            initial = st.number_input(value= 120,label="initial",min_value=30,max_value=1096)
+            initial = st.number_input(
+                value=120, label="initial", min_value=30, max_value=1096)
             initial = str(initial) + " days"
 
-            period = st.number_input(value= 60,label="period",min_value=1,max_value=365)
+            period = st.number_input(
+                value=60, label="period", min_value=1, max_value=365)
             period = str(period) + " days"
 
-            horizon = st.number_input(value= 90, label="horizon",min_value=30,max_value=366)
+            horizon = st.number_input(
+                value=90, label="horizon", min_value=30, max_value=366)
             horizon = str(horizon) + " days"
 
-            st.write(f"Here we do cross-validation to assess prediction performance on a horizon of **{horizon}** , starting with **{initial}**  of training data in the first cutoff and then making predictions every **{period}**.")
-            st.markdown("""For more information read the [documentation](https://facebook.github.io/prophet/docs/diagnostics.html#parallelizing-cross-validation)""")
-        
+            st.write(
+                f"Here we do cross-validation to assess prediction performance on a horizon of **{horizon}** , starting with **{initial}**  of training data in the first cutoff and then making predictions every **{period}**.")
+            st.markdown(
+                """For more information read the [documentation](https://facebook.github.io/prophet/docs/diagnostics.html#parallelizing-cross-validation)""")
 
         # with st.expander("Metrics"):
 
@@ -580,26 +578,29 @@ if page == "Application":
                                 df_p = performance_metrics(df_cv)
                                 st.write(df_p)
                                 metrics = 1
-                                
+
                                 if metrics == 1:
                                     st.markdown('**Metrics definition**')
                                     st.write("Mse: mean absolute error")
                                     st.write("Mae: Mean average error")
-                                    st.write("Mape: Mean average percentage error")
+                                    st.write(
+                                        "Mape: Mean average percentage error")
                                     st.write("Mse: mean absolute error")
-                                    st.write("Mdape: Median average percentage error")
+                                    st.write(
+                                        "Mdape: Median average percentage error")
 
                                     metrics = ['Choose a metric', 'mse', 'rmse',
-                                            'mae', 'mape', 'mdape', 'coverage']
+                                               'mae', 'mape', 'mdape', 'coverage']
                                     selected_metric = st.selectbox(
                                         "Select metric to plot", options=metrics)
                                     if selected_metric != metrics[0]:
                                         fig4 = plot_cross_validation_metric(
                                             df_cv, metric=selected_metric)
                                         st.write(fig4)
-                                    
+
                             except:
-                                st.write("Invalid configuration, try other periods")
+                                st.write(
+                                    "Invalid configuration, try other periods")
 
             else:
                 st.write("Create a forecast to see metrics")
@@ -612,7 +613,7 @@ if page == "Application":
 
         param_grid = {
             'changepoint_prior_scale': [0.1, 1.0, 5.0],
-            'seasonality_prior_scale': [ 0.1, 0.5, 1.0],
+            'seasonality_prior_scale': [0.1, 0.5, 1.0],
         }
 
         # Generate all combinations of parameters
@@ -679,9 +680,9 @@ if page == "Application":
 
                 with col1:
                     st.download_button(label="Download forecast",
-                                        data=csv,
-                                        file_name='Forecast.csv',
-                                        mime='text/csv')
+                                       data=csv,
+                                       file_name='Forecast.csv',
+                                       mime='text/csv')
                     # if st.button('Export Forecast (.csv)'):
                     #     with st.spinner("Exporting.."):
 
@@ -707,8 +708,6 @@ if page == "Application":
                         with st.spinner("Exporting.."):
                             with open('serialized_model.json', 'w') as fout:
                                 json.dump(model_to_json(m), fout)
-
-            
 
             else:
                 st.write("Generate a forecast to download.")
