@@ -7,3 +7,4 @@ plotly==5.6.0
 pystan==2.19.1.1
 holidays==0.13
 yfinance==0.1.70
+tensorflow==2.8.0
