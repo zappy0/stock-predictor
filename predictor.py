@@ -185,10 +185,11 @@ if page == "Application":
     st.subheader('Predictions')
     fig2 = go.Figure(layout_xaxis_range=[date.today()-timedelta(days=1),date.today()+timedelta(days=40)])
     
-    for finaldf in finaldfs:
-            
-        fig2 = fig2.add_trace(go.Scatter(x=finaldf[0].index,y = finaldf[0]["Prediction"], name = finaldf[1]))
-    
-    st.plotly_chart(fig2)
+    if len(tickers)>0:
+        for finaldf in finaldfs:
+                
+            fig2 = fig2.add_trace(go.Scatter(x=finaldf[0].index,y = finaldf[0]["Prediction"], name = finaldf[1]))
+        
+        st.plotly_chart(fig2)
         
     
