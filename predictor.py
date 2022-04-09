@@ -12,7 +12,7 @@ import itertools
 import datetime
 from datetime import date
 import plotly.graph_objects as go
-
+import tensorflow
 from tensorflow import keras
 
 
