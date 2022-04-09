@@ -8,4 +8,4 @@ pystan==2.19.1.1
 holidays==0.13
 yfinance==0.1.70
 tensorflow==2.8.0
-sklearn==1.0.2
+
