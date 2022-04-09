@@ -12,6 +12,7 @@ import itertools
 import datetime
 from datetime import date,timedelta
 import plotly.graph_objects as go
+import sklearn
 from sklearn.preprocessing import MinMaxScaler
 scalerl=[]
 import keras
