@@ -69,16 +69,16 @@ if page == "Application":
     
     # df = prep_data(df)
 
-    if st.checkbox('Chart Current data', key='show'):
-        with st.spinner('Plotting data..'):
+    # if st.checkbox('Chart Current data', key='show'):
+    #     with st.spinner('Plotting data..'):
             
-            fig = go.Figure(layout_xaxis_range=['2020-01-01',date.today()])
-            
-            for df in dataframes:
-                fig = fig.add_trace(go.Scatter(x=df[0].index,y = df[0]["Close"], name = df[1]))
-            
-            # fig.show()
-            st.plotly_chart(fig)
+    fig = go.Figure(layout_xaxis_range=['2020-01-01',date.today()])
+    
+    for df in dataframes:
+        fig = fig.add_trace(go.Scatter(x=df[0].index,y = df[0]["Close"], name = df[1]))
+    
+    # fig.show()
+    st.plotly_chart(fig)
     
     if len(tickers)!=0:
         sdfs=[]
