@@ -36,8 +36,6 @@ if page == "Application":
     st.write(
         'Select and compare stock forecasts')
     
-    # st.markdown(
-    #     """The forecasting library used is **[Prophet](https://facebook.github.io/prophet/)**.""")
     # caching.clear_cache()
     
     # df = pd.DataFrame()
