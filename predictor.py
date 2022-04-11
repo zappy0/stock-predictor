@@ -183,7 +183,7 @@ if page == "Application":
         st.write("Please Select a stock to predict")
     
     st.subheader('Predictions')
-    fig2 = go.Figure(layout_xaxis_range=[date.today()-timedelta(days=1),date.today()+timedelta(days=40)])
+    fig2 = go.Figure(layout_xaxis_range=[date.today(),date.today()+timedelta(days=40)])
     
     if len(tickers)>0:
         for finaldf in finaldfs:
