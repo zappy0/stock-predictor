@@ -191,5 +191,8 @@ if page == "Application":
             fig2 = fig2.add_trace(go.Scatter(x=finaldf[0].index,y = finaldf[0]["Prediction"], name = finaldf[1]))
         
         st.plotly_chart(fig2)
-        
+    
+    for finaldf in finaldfs:
+        st.write(finaldf[1])
+        st.dataframe(finaldf[0][:8]) 
     
