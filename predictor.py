@@ -194,5 +194,5 @@ if page == "Application":
     
     for finaldf in finaldfs:
         st.write(finaldf[1])
-        st.dataframe(finaldf[0][:8]) 
+        st.dataframe(finaldf[0][1:8]) 
     
